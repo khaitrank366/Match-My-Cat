@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,12 +7,14 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     [SerializeField] Image icon;
-    [SerializeField] CardData dataSO;
+    public CardData dataSO;
     [SerializeField] Sprite hiddenSprite;
     public bool isSelected;
 
+    public event Action<Card> OnCardClicked;
+
     [ContextMenu("Show Card")]
-    public void Show()
+    private void Show()
     {
         icon.sprite = dataSO.sprite;
         isSelected = true;
@@ -24,9 +27,9 @@ public class Card : MonoBehaviour
         isSelected = false;
     }
 
-    public void OnClickCard()
+    public void ClickCard()
     {
-        SoundManager.Instance.PlayFlip(dataSO.flipSound);
         Show();
+        OnCardClicked.Invoke(this);
     }
 }

@@ -59,28 +59,39 @@ public class BoardManager : MonoBehaviour
     private List<CardData> GenerateCardPairs(int rows, int cols)
     {
         int pairCount = (rows * cols) / 2;
-        List<CardData> selectedCards = new List<CardData>();
-        List<int> usedIndices = new List<int>();
 
-        while (selectedCards.Count < pairCount)
+        // Tạo list index: [0,1,2,3,...]
+        List<int> indices = new List<int>();
+        for (int i = 0; i < allCards.Count; i++)
         {
-            int index = Random.Range(0, allCards.Count);
-            if (!usedIndices.Contains(index))
-            {
-                selectedCards.Add(allCards[index]);
-                usedIndices.Add(index);
-            }
+            indices.Add(i);
         }
 
-        List<CardData> boardCards = new List<CardData>();
-        foreach (var card in selectedCards)
+        // Shuffle index list
+        for (int i = 0; i < indices.Count; i++)
         {
-            boardCards.Add(card);
-            boardCards.Add(card);
+            int j = Random.Range(i, indices.Count);
+            (indices[i], indices[j]) = (indices[j], indices[i]);
+        }
+
+        // Chọn pairCount index đầu tiên
+        List<CardData> selectedCards = new List<CardData>(pairCount);
+        for (int i = 0; i < pairCount; i++)
+        {
+            selectedCards.Add(allCards[indices[i]]);
+        }
+
+        // Nhân đôi
+        List<CardData> boardCards = new List<CardData>(pairCount * 2);
+        for (int i = 0; i < selectedCards.Count; i++)
+        {
+            boardCards.Add(selectedCards[i]);
+            boardCards.Add(selectedCards[i]);
         }
 
         return boardCards;
     }
+
 
     // ======================================================
     // 3. Shuffle danh sách card
@@ -120,12 +131,12 @@ public class BoardManager : MonoBehaviour
     // ======================================================
     private void UpdateGridLayout()
     {
-        // // Tính cell size tự động
-        // RectTransform rt = gridLayout.GetComponent<RectTransform>();
-        // float width = rt.rect.width - gridLayout.padding.left - gridLayout.padding.right - (cols - 1) * gridLayout.spacing.x;
-        // float height = rt.rect.height - gridLayout.padding.top - gridLayout.padding.bottom - (rows - 1) * gridLayout.spacing.y;
+        // Tính cell size tự động
+        RectTransform rt = gridLayout.GetComponent<RectTransform>();
+        float width = rt.rect.width - gridLayout.padding.left - gridLayout.padding.right - (colTest - 1) * gridLayout.spacing.x;
+        float height = rt.rect.height - gridLayout.padding.top - gridLayout.padding.bottom - (rowTest - 1) * gridLayout.spacing.y;
 
-        // float cellSize = Mathf.Min(width / cols, height / rows);
-        // gridLayout.cellSize = new Vector2(cellSize, cellSize);
+        float cellSize = Mathf.Min(width / colTest, height / rowTest);
+        gridLayout.cellSize = new Vector2(cellSize, cellSize);
     }
 }

@@ -7,4 +7,8 @@ public class SoundProfileSO : ScriptableObject
     public AudioClip mismatchSfx;
     public AudioClip gameOverSfx;
     public AudioClip warning10sSfx;
+
+      [Header("Combo Sounds")]
+    public AudioClip[] comboSounds;       
+    public AudioClip[] maxComboRandom;
 }

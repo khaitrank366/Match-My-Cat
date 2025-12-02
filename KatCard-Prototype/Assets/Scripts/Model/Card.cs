@@ -24,4 +24,9 @@ public class Card : MonoBehaviour
         isSelected = false;
     }
 
+    public void OnClickCard()
+    {
+        SoundManager.Instance.PlayFlip(dataSO.flipSound);
+        Show();
+    }
 }

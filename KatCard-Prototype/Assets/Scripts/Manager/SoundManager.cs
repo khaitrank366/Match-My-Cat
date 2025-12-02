@@ -27,9 +27,11 @@ public class SoundManager : MonoBehaviour
     }
     public void PlayFlip(AudioClip clip)
     {
+        Debug.Log("Playing Flip SFX: " + clip.name);
         if (flipSource.isPlaying)
             flipSource.Stop();
 
+        flipSource.clip = clip;
         flipSource.PlayOneShot(clip);
     }
     public void PlayMatch() => PlaySfx(soundProfile.matchSfx);
@@ -39,6 +41,7 @@ public class SoundManager : MonoBehaviour
 
     private void PlaySfx(AudioClip clip)
     {
+        Debug.Log("Playing SFX: " + clip.name);
         sfxSource.PlayOneShot(clip);
     }
     public int CountdownEvent = 0;

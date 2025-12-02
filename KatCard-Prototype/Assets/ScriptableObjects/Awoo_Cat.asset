@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdec9f87e36981f44a718b5a4c5cd3a8, type: 3}
+  m_Name: Awoo_Cat
+  m_EditorClassIdentifier: 
+  cardId: 3
+  sprite: {fileID: 21300000, guid: 2ca8683f481c2e34a85dff7ba5462d0e, type: 3}
+  flipSound: {fileID: 8300000, guid: c4dc36e9b2556344fba41eae1edfaeab, type: 3}

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdec9f87e36981f44a718b5a4c5cd3a8, type: 3}
+  m_Name: Huh_Cat
+  m_EditorClassIdentifier: 
+  cardId: 9
+  sprite: {fileID: 21300000, guid: b9a4bf1c5eb64e3469b4db34cf8eb970, type: 3}
+  flipSound: {fileID: 8300000, guid: bb5ff4c25f561f6459f7340b7acb1681, type: 3}

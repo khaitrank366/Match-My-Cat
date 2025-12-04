@@ -37,41 +37,43 @@ public class Card : MonoBehaviour
 
     private IEnumerator FlipCardCoroutine(bool show)
     {
+        if (isFlipping) yield break;
         isFlipping = true;
 
         float halfDuration = flipDuration / 2f;
-        Vector3 axis = Vector3.up;
+        float direction = show ? 1f : -1f;
 
-        Quaternion startRotation = transform.rotation;;
-        Quaternion endRotation;
-        Debug.Log("startRotation: " + startRotation.eulerAngles);
-        if (show)
-        {
-            // Show: bắt đầu rotation hiện tại, kết thúc +180° (lật lên)
-            endRotation = startRotation * Quaternion.Euler(axis * 180f);
-        }
-        else
-        {
-            // Hide: bắt đầu rotation hiện tại, kết thúc -180° (lật ngược)
-            endRotation = startRotation * Quaternion.Euler(axis * -180f);
-        }
-        Debug.Log("endRotation: " + endRotation.eulerAngles);
+        Quaternion startRotation = transform.rotation;
+        Quaternion midRotation = startRotation * Quaternion.Euler(0, 90f * direction, 0);
+        Quaternion endRotation = startRotation * Quaternion.Euler(0, 180f * direction, 0);
 
-        // Midpoint = +90° hoặc -90° so với startRotation
-        Quaternion midRotation = startRotation * Quaternion.Euler(axis * (show ? 90f : -90f));
-        Debug.Log("midRotation: " + midRotation.eulerAngles);
-        // 1️⃣ Quay tới 90° (mặt cũ biến mất)
+        // 1️⃣ Quay tới giữa (90°)
         float t = 0f;
         while (t < halfDuration)
         {
             t += Time.deltaTime;
             float normalized = t / halfDuration;
-            float tEase = normalized * normalized * (3f - 2f * normalized); // SmoothStep
+            float tEase = normalized * normalized * (3f - 2f * normalized);
             transform.rotation = Quaternion.Slerp(startRotation, midRotation, tEase);
+
+            // Lật sprite khi đi qua 90°
+            if (transform.rotation.eulerAngles.y >= 90f && transform.rotation.eulerAngles.y <= 270f)
+            {
+                Vector3 s = icon.transform.localScale;
+                s.x = -Mathf.Abs(s.x); // lật ngang
+                icon.transform.localScale = s;
+            }
+            else
+            {
+                Vector3 s = icon.transform.localScale;
+                s.x = Mathf.Abs(s.x); // trở lại bình thường
+                icon.transform.localScale = s;
+            }
+
             yield return null;
         }
 
-        // 2️⃣ Đổi sprite khi thẻ quay giữa
+        // 2️⃣ Đổi sprite khi card quay giữa
         icon.sprite = show ? dataSO.sprite : hiddenSprite;
         isSelected = show;
 
@@ -81,17 +83,32 @@ public class Card : MonoBehaviour
         {
             t += Time.deltaTime;
             float normalized = t / halfDuration;
-            float tEase = normalized * normalized * (3f - 2f * normalized); // SmoothStep
+            float tEase = normalized * normalized * (3f - 2f * normalized);
             transform.rotation = Quaternion.Slerp(midRotation, endRotation, tEase);
+
+            // Điều chỉnh lại scale để sprite hướng đúng
+            if (transform.rotation.eulerAngles.y >= 90f && transform.rotation.eulerAngles.y <= 270f)
+            {
+                Vector3 s = icon.transform.localScale;
+                s.x = -Mathf.Abs(s.x);
+                icon.transform.localScale = s;
+            }
+            else
+            {
+                Vector3 s = icon.transform.localScale;
+                s.x = Mathf.Abs(s.x);
+                icon.transform.localScale = s;
+            }
+
             yield return null;
         }
 
         transform.rotation = endRotation;
         isFlipping = false;
 
-        // 4️⃣ Event + âm thanh chỉ khi show
         if (show)
             OnCardClicked?.Invoke(this);
     }
+
 
 }

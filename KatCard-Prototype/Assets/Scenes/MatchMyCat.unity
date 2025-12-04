@@ -152,7 +152,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardPool: {fileID: 1469421109}
-  cardPrefab: {fileID: 4723136522359641879, guid: 2a83c37cf8fb0374c9e28f99a5f44d62, type: 3}
   allCards:
   - {fileID: 11400000, guid: 5201ab6de5fadfc4ea3a0a8ace55f28b, type: 2}
   - {fileID: 11400000, guid: aefe54e8d562e1d46a585941651f95f0, type: 2}
@@ -168,6 +167,7 @@ MonoBehaviour:
   gridLayout: {fileID: 1388316064}
   rowTest: 3
   colTest: 2
+  activeCards: []
 --- !u!4 &204156574
 Transform:
   m_ObjectHideFlags: 0
@@ -463,10 +463,6 @@ PrefabInstance:
     - target: {fileID: 4723136522359641879, guid: 2a83c37cf8fb0374c9e28f99a5f44d62, type: 3}
       propertyPath: m_Name
       value: Card
-      objectReference: {fileID: 0}
-    - target: {fileID: 4723136522359641879, guid: 2a83c37cf8fb0374c9e28f99a5f44d62, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a83c37cf8fb0374c9e28f99a5f44d62, type: 3}
@@ -820,7 +816,7 @@ AudioSource:
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
-  Mute: 1
+  Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128

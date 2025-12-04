@@ -30,6 +30,6 @@ public class Card : MonoBehaviour
     public void ClickCard()
     {
         Show();
-        OnCardClicked.Invoke(this);
+        OnCardClicked?.Invoke(this);
     }
 }

@@ -34,9 +34,25 @@ public class CardPool : MonoBehaviour
         return CreateNewCard();
     }
 
+    public void Release(GameObject obj)
+    {
+        if (pool.Contains(obj))
+        {
+            obj.SetActive(false);
+            obj.transform.SetParent(transform, false);
+        }
+        else
+        {
+            Debug.LogWarning("Object không thuộc pool!");
+            Destroy(obj);
+        }
+    }
+
     public void ReleaseAll()
     {
         foreach (var obj in pool)
+        {
             obj.SetActive(false);
+        }
     }
 }

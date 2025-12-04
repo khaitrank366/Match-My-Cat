@@ -6,15 +6,16 @@ public class BoardManager : MonoBehaviour
 {
     [Header("Prefabs & Data")]
     public CardPool cardPool;
-    public GameObject cardPrefab;
     public List<CardData> allCards;
 
     [Header("UI")]
     public GridLayoutGroup gridLayout;
 
     [Header("Board Size")]
-    public int rowTest = 2;  
-    public int colTest = 5;  
+    public int rowTest = 2;
+    public int colTest = 5;
+    [SerializeField] private List<Card> activeCards = new List<Card>();
+
 
     [ContextMenu("Generate Board")]
     public void GenerateBoardDefault()
@@ -103,9 +104,8 @@ public class BoardManager : MonoBehaviour
     // ======================================================
     private void SpawnCards(List<CardData> cards)
     {
-        cardPool.ReleaseAll();
+        DespawnCards();
 
-        // Spawn đủ số card
         foreach (var cardData in cards)
         {
             GameObject cardObj = cardPool.Get();
@@ -114,7 +114,28 @@ public class BoardManager : MonoBehaviour
 
             Card card = cardObj.GetComponent<Card>();
             card.dataSO = cardData;
+            card.OnCardClicked += CardClickEvent;
+            Debug.Log("Spawned Card: " + cardData.cardId);
+            activeCards.Add(card);
+
         }
+    }
+
+    private void DespawnCards()
+    {
+        foreach (var card in activeCards)
+        {
+            card.OnCardClicked -= CardClickEvent;
+            card.Hide();
+            cardPool.Release(card.gameObject);
+        }
+        activeCards.Clear();
+    }
+
+    private void CardClickEvent(Card card)
+    {
+        Debug.Log("Card clicked: " + card.dataSO.cardId);
+        SoundManager.Instance.PlayFlip(card.dataSO.flipSound);
     }
 
     // ======================================================

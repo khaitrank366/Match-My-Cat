@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -69,8 +70,15 @@ public class Card : MonoBehaviour
 
     public void SetUnmatched()
     {
+        StartCoroutine(Unmatch());
+    }
+
+    private IEnumerator Unmatch()
+    {
         button.interactable = false;
         background.color = new Color(1f, 0f, 0f, 1f);
+        yield return new WaitForSeconds(0.5f);
+        Hide();
     }
 
     private IEnumerator FlipCardCoroutine(bool show)

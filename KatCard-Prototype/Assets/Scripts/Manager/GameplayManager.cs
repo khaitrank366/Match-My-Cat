@@ -7,9 +7,9 @@ public class GameplayManager : MonoBehaviour
     public static GameplayManager Instance { get; private set; }
 
     // Events
-    public  event Action<Card, Card> OnMatch;
-    public  event Action<Card, Card> OnMismatch;
-    public  event Action<int> OnComboChanged;
+    public event Action<Card, Card> OnMatch;
+    public event Action<Card, Card> OnMismatch;
+    public event Action<int> OnComboChanged;
 
     [SerializeField] private Card firstCard;
     [SerializeField] private Card secondCard;
@@ -30,23 +30,23 @@ public class GameplayManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
-    
+
     public void HandleCardFlipped(Card card)
     {
         if (firstCard == null)
         {
             firstCard = card;
-            Debug.Log("First card selected: " + card.dataSO.cardId);
+            // Debug.Log("First card selected: " + card.dataSO.cardId);
         }
         else if (secondCard == null)
         {
             secondCard = card;
-            Debug.Log("Second card selected: " + card.dataSO.cardId);
-            StartCoroutine(CheckMatchCoroutine());
+            // Debug.Log("Second card selected: " + card.dataSO.cardId);
+            CheckMatch();
         }
     }
 
-    private IEnumerator CheckMatchCoroutine()
+    private void CheckMatch()
     {
         if (firstCard.dataSO.cardId == secondCard.dataSO.cardId)
         {
@@ -59,9 +59,10 @@ public class GameplayManager : MonoBehaviour
             firstCard.SetMatched();
             secondCard.SetMatched();
 
-            // Trigger events
             OnMatch?.Invoke(firstCard, secondCard);
             OnComboChanged?.Invoke(combo);
+
+            firstCard = secondCard = null;
         }
         else
         {
@@ -70,23 +71,12 @@ public class GameplayManager : MonoBehaviour
             OnComboChanged?.Invoke(combo);
             OnMismatch?.Invoke(firstCard, secondCard);
 
-            // Disable input tạm thời
-            firstCard.DisableCard();
-            secondCard.DisableCard();
+            firstCard.SetUnmatched();
+            secondCard.SetUnmatched();
 
-            yield return new WaitForSeconds(0.5f);
-
-            firstCard.Hide();
-            secondCard.Hide();
-
-            firstCard.EnableCard();
-            secondCard.EnableCard();
-
-            // Trigger mismatch event
-
+            firstCard = secondCard = null;
         }
 
-        firstCard = secondCard = null;
     }
 
     // Optional: reset combo manually

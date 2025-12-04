@@ -1,12 +1,8 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-[System.Serializable]
 public class Card : MonoBehaviour
 {
     [SerializeField] Image icon;
@@ -14,78 +10,67 @@ public class Card : MonoBehaviour
     [SerializeField] Button button;
     public CardData dataSO;
     [SerializeField] Sprite hiddenSprite;
-    public bool isSelected;
+
+    public bool isSelected = false;
 
     [SerializeField] private float flipDuration = 0.5f;
     private bool isFlipping = false;
 
     public event Action<Card> OnCardClicked;
 
-    [ContextMenu("Show Card")]
-    private void Show()
-    {
-        if (!isFlipping && !isSelected)
-            StartCoroutine(FlipCardCoroutine(show: true));
-    }
-
-    public void Reveal()
-    {
-        icon.sprite = dataSO.sprite;
-    }
-
-    public void Reset()
-    {
-        OnCardClicked = null;
-        isSelected = false;
-        isFlipping = false;
-        button.interactable = true;
-
-        background.color = new Color(1f, 1f, 1f, 1f);
-        icon.sprite = hiddenSprite;
-        transform.rotation = Quaternion.identity;
-        Vector3 s = icon.transform.localScale;
-        s.x = Mathf.Abs(s.x);
-        icon.transform.localScale = s;
-    }
-
-    [ContextMenu("Hide Card")]
-    public void Hide()
-    {
-        if (!isFlipping && isSelected)
-            StartCoroutine(FlipCardCoroutine(show: false));
-    }
-
     public void ClickCard()
     {
-        Show();
+        // Debug.Log("Card clicked: " + dataSO.cardId);
+        if (!isFlipping)
+            StartCoroutine(Flip(show: true));
+    }
+
+    public void Hide()
+    {
+        StartCoroutine(Flip(show: false));
+    }
+    public void Reveal() { icon.sprite = dataSO.sprite; }
+
+    public void ResetVisual()
+    {
+        isSelected = false;
+        isFlipping = false;
+
+        background.color = Color.white;
+        icon.sprite = hiddenSprite;
+
+        button.interactable = true;
     }
 
     public void SetMatched()
     {
         isSelected = true;
         button.interactable = false;
-
         background.color = new Color(0f, 1f, 0f, 0.5f);
     }
 
     public void SetUnmatched()
     {
-        StartCoroutine(Unmatch());
+        StartCoroutine(DoUnmatch());
     }
 
-    private IEnumerator Unmatch()
+    private IEnumerator DoUnmatch()
     {
+        background.color = Color.red;
         button.interactable = false;
-        background.color = new Color(1f, 0f, 0f, 1f);
+
         yield return new WaitForSeconds(0.5f);
+
+        background.color = Color.white;
+        button.interactable = true;
         Hide();
+
     }
 
-    private IEnumerator FlipCardCoroutine(bool show)
+    private IEnumerator Flip(bool show)
     {
         if (isFlipping) yield break;
         isFlipping = true;
-
         float halfDuration = flipDuration / 2f;
         float direction = show ? 1f : -1f;
 
@@ -93,69 +78,52 @@ public class Card : MonoBehaviour
         Quaternion midRotation = startRotation * Quaternion.Euler(0, 90f * direction, 0);
         Quaternion endRotation = startRotation * Quaternion.Euler(0, 180f * direction, 0);
 
-        // 1️⃣ Quay tới giữa (90°)
-        float t = 0f;
-        while (t < halfDuration)
+        float t = 0f; while (t < halfDuration)
         {
             t += Time.deltaTime;
             float normalized = t / halfDuration;
             float tEase = normalized * normalized * (3f - 2f * normalized);
             transform.rotation = Quaternion.Slerp(startRotation, midRotation, tEase);
 
-            // Lật sprite khi đi qua 90°
             if (transform.rotation.eulerAngles.y >= 90f && transform.rotation.eulerAngles.y <= 270f)
             {
-                Vector3 s = icon.transform.localScale;
-                s.x = -Mathf.Abs(s.x); // lật ngang
+                Vector3 s = icon.transform.localScale; s.x = -Mathf.Abs(s.x); // lật ngang 
                 icon.transform.localScale = s;
             }
             else
             {
-                Vector3 s = icon.transform.localScale;
-                s.x = Mathf.Abs(s.x); // trở lại bình thường
+                Vector3 s = icon.transform.localScale; s.x = Mathf.Abs(s.x); // trở lại bình thường 
                 icon.transform.localScale = s;
             }
-
             yield return null;
         }
 
-        // 2️⃣ Đổi sprite khi card quay giữa
         icon.sprite = show ? dataSO.sprite : hiddenSprite;
         isSelected = show;
-        if (!show) Reset();
 
-        // 3️⃣ Quay tiếp 90° để hoàn tất lật
         t = 0f;
         while (t < halfDuration)
         {
-            t += Time.deltaTime;
-            float normalized = t / halfDuration;
+            t += Time.deltaTime; float normalized = t / halfDuration;
             float tEase = normalized * normalized * (3f - 2f * normalized);
             transform.rotation = Quaternion.Slerp(midRotation, endRotation, tEase);
 
-            // Điều chỉnh lại scale để sprite hướng đúng
             if (transform.rotation.eulerAngles.y >= 90f && transform.rotation.eulerAngles.y <= 270f)
             {
                 Vector3 s = icon.transform.localScale;
-                s.x = -Mathf.Abs(s.x);
-                icon.transform.localScale = s;
+                s.x = -Mathf.Abs(s.x); icon.transform.localScale = s;
             }
             else
             {
                 Vector3 s = icon.transform.localScale;
-                s.x = Mathf.Abs(s.x);
-                icon.transform.localScale = s;
+                s.x = Mathf.Abs(s.x); icon.transform.localScale = s;
             }
-
             yield return null;
         }
 
         transform.rotation = endRotation;
         isFlipping = false;
 
-        if (show)
-            OnCardClicked?.Invoke(this);
+        if (show) OnCardClicked?.Invoke(this);
     }
-
-
 }

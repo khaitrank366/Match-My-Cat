@@ -10,9 +10,6 @@ public class Card : MonoBehaviour
     [SerializeField] Button button;
     public CardData dataSO;
     [SerializeField] Sprite hiddenSprite;
-
-    public bool isSelected = false;
-
     [SerializeField] private float flipDuration = 0.5f;
     private bool isFlipping = false;
 
@@ -33,18 +30,23 @@ public class Card : MonoBehaviour
 
     public void ResetVisual()
     {
-        isSelected = false;
         isFlipping = false;
 
         background.color = Color.white;
         icon.sprite = hiddenSprite;
+
+        icon.transform.localRotation = Quaternion.identity;
+        icon.transform.localPosition = Vector3.zero;
+        icon.transform.localScale = Vector3.one;
+        transform.localRotation = Quaternion.identity;   
+        transform.localPosition = Vector3.zero;          
+        transform.localScale = Vector3.one;
 
         button.interactable = true;
     }
 
     public void SetMatched()
     {
-        isSelected = true;
         button.interactable = false;
         background.color = new Color(0f, 1f, 0f, 0.5f);
     }
@@ -99,7 +101,6 @@ public class Card : MonoBehaviour
         }
 
         icon.sprite = show ? dataSO.sprite : hiddenSprite;
-        isSelected = show;
 
         t = 0f;
         while (t < halfDuration)

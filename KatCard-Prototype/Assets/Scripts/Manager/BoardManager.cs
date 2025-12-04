@@ -115,7 +115,6 @@ public class BoardManager : MonoBehaviour
             Card card = cardObj.GetComponent<Card>();
             card.dataSO = cardData;
             card.OnCardClicked += CardClickEvent;
-            Debug.Log("Spawned Card: " + cardData.cardId);
             activeCards.Add(card);
 
         }
@@ -134,7 +133,6 @@ public class BoardManager : MonoBehaviour
 
     private void CardClickEvent(Card card)
     {
-        Debug.Log("Card clicked: " + card.dataSO.cardId);
         SoundManager.Instance.PlayFlip(card.dataSO.flipSound);
     }
 

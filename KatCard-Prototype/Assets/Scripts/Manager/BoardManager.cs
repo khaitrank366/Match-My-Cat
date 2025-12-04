@@ -5,17 +5,17 @@ using UnityEngine.UI;
 public class BoardManager : MonoBehaviour
 {
     [Header("Prefabs & Data")]
+    public CardPool cardPool;
     public GameObject cardPrefab;
     public List<CardData> allCards;
 
     [Header("UI")]
     public GridLayoutGroup gridLayout;
 
-    public int colTest;
-    public int rowTest;
-    // ======================================================
-    // PUBLIC ENTRY POINT
-    // ======================================================
+    [Header("Board Size")]
+    public int rowTest = 2;  
+    public int colTest = 5;  
+
     [ContextMenu("Generate Board")]
     public void GenerateBoardDefault()
     {
@@ -29,7 +29,7 @@ public class BoardManager : MonoBehaviour
         List<CardData> boardCards = GenerateCardPairs(rows, cols);
         ShuffleCards(boardCards);
         SpawnCards(boardCards);
-        UpdateGridLayout();
+        UpdateGridLayout(rows, cols);
     }
 
     // ======================================================
@@ -60,50 +60,41 @@ public class BoardManager : MonoBehaviour
     {
         int pairCount = (rows * cols) / 2;
 
-        // Tạo list index: [0,1,2,3,...]
         List<int> indices = new List<int>();
-        for (int i = 0; i < allCards.Count; i++)
-        {
-            indices.Add(i);
-        }
+        for (int i = 0; i < allCards.Count; i++) indices.Add(i);
 
-        // Shuffle index list
+        // Shuffle index
         for (int i = 0; i < indices.Count; i++)
         {
             int j = Random.Range(i, indices.Count);
             (indices[i], indices[j]) = (indices[j], indices[i]);
         }
 
-        // Chọn pairCount index đầu tiên
-        List<CardData> selectedCards = new List<CardData>(pairCount);
+        // Chọn pairCount card
+        List<CardData> selectedCards = new List<CardData>();
         for (int i = 0; i < pairCount; i++)
-        {
             selectedCards.Add(allCards[indices[i]]);
-        }
 
         // Nhân đôi
-        List<CardData> boardCards = new List<CardData>(pairCount * 2);
-        for (int i = 0; i < selectedCards.Count; i++)
+        List<CardData> boardCards = new List<CardData>();
+        foreach (var card in selectedCards)
         {
-            boardCards.Add(selectedCards[i]);
-            boardCards.Add(selectedCards[i]);
+            boardCards.Add(card);
+            boardCards.Add(card);
         }
 
         return boardCards;
     }
 
-
     // ======================================================
-    // 3. Shuffle danh sách card
+    // 3. Shuffle cards
     // ======================================================
     private void ShuffleCards(List<CardData> cards)
     {
         for (int i = 0; i < cards.Count; i++)
         {
             int j = Random.Range(i, cards.Count);
-            var temp = cards[i];
-            cards[i] = cards[j];
-            cards[j] = temp;
+            (cards[i], cards[j]) = (cards[j], cards[i]);
         }
     }
 
@@ -112,31 +103,42 @@ public class BoardManager : MonoBehaviour
     // ======================================================
     private void SpawnCards(List<CardData> cards)
     {
-        // Xóa board cũ
-        foreach (Transform child in gridLayout.transform)
-        {
-            Destroy(child.gameObject);
-        }
+        cardPool.ReleaseAll();
 
+        // Spawn đủ số card
         foreach (var cardData in cards)
         {
-            GameObject cardObj = Instantiate(cardPrefab, gridLayout.transform);
+            GameObject cardObj = cardPool.Get();
+            cardObj.transform.SetParent(gridLayout.transform, false);
+            cardObj.SetActive(true);
+
             Card card = cardObj.GetComponent<Card>();
             card.dataSO = cardData;
         }
     }
 
     // ======================================================
-    // 5. Cập nhật GridLayoutGroup theo rows/cols
+    // 5. Cập nhật GridLayoutGroup theo rows/cols nhập
     // ======================================================
-    private void UpdateGridLayout()
+    private void UpdateGridLayout(int rows, int cols)
     {
-        // Tính cell size tự động
         RectTransform rt = gridLayout.GetComponent<RectTransform>();
-        float width = rt.rect.width - gridLayout.padding.left - gridLayout.padding.right - (colTest - 1) * gridLayout.spacing.x;
-        float height = rt.rect.height - gridLayout.padding.top - gridLayout.padding.bottom - (rowTest - 1) * gridLayout.spacing.y;
 
-        float cellSize = Mathf.Min(width / colTest, height / rowTest);
+        // Tính width & height khả dụng
+        float width = rt.rect.width - gridLayout.padding.left - gridLayout.padding.right - gridLayout.spacing.x * (cols - 1);
+        float height = rt.rect.height - gridLayout.padding.top - gridLayout.padding.bottom - gridLayout.spacing.y * (rows - 1);
+
+        // Chọn cellSize vuông
+        float cellSize = Mathf.Min(width / cols, height / rows);
         gridLayout.cellSize = new Vector2(cellSize, cellSize);
+
+        // Căn giữa board nếu dư khoảng trống
+        float boardWidth = cellSize * cols + gridLayout.spacing.x * (cols - 1);
+        float boardHeight = cellSize * rows + gridLayout.spacing.y * (rows - 1);
+
+        gridLayout.padding.left = Mathf.RoundToInt((rt.rect.width - boardWidth) / 2f);
+        gridLayout.padding.right = gridLayout.padding.left;
+        gridLayout.padding.top = Mathf.RoundToInt((rt.rect.height - boardHeight) / 2f);
+        gridLayout.padding.bottom = gridLayout.padding.top;
     }
 }

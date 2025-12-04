@@ -38,7 +38,7 @@ public class SoundManager : MonoBehaviour
     }
     public void PlayFlip(AudioClip clip)
     {
-        Debug.Log("Playing Flip SFX: " + clip.name);
+        // Debug.Log("Playing Flip SFX: " + clip.name);
         if (flipSource.isPlaying)
             flipSource.Stop();
 
@@ -52,7 +52,7 @@ public class SoundManager : MonoBehaviour
 
     private void PlaySfx(AudioClip clip)
     {
-        Debug.Log("Playing SFX: " + clip.name);
+        // Debug.Log("Playing SFX: " + clip.name);
         if (flipSource.isPlaying)
             flipSource.Stop();
         sfxSource.PlayOneShot(clip);
@@ -88,7 +88,7 @@ public class SoundManager : MonoBehaviour
         if (clip != null)
             PlaySfx(clip);
 
-        Debug.Log("Current clip: " + clip.name);
+        // Debug.Log("Current clip: " + clip.name);
     }
 
 }

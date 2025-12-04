@@ -134,8 +134,9 @@ public class BoardManager : MonoBehaviour
     {
         foreach (var card in activeCards)
         {
-            card.OnCardClicked -= CardClickEvent;
-            card.Hide();
+             card.OnCardClicked -= CardClickEvent;
+             card.OnCardClicked -= GameplayManager.Instance.HandleCardFlipped;
+            card.Reset();
             cardPool.Release(card.gameObject);
         }
         activeCards.Clear();

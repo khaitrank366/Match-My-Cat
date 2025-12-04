@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
 public class Card : MonoBehaviour
 {
     [SerializeField] Image icon;
+    [SerializeField] Button button;
     public CardData dataSO;
     [SerializeField] Sprite hiddenSprite;
     public bool isSelected;
@@ -33,6 +35,25 @@ public class Card : MonoBehaviour
     public void ClickCard()
     {
         Show();
+    }
+
+    public void SetMatched()
+    {
+        isSelected = true;
+
+        button.interactable = false;
+
+        var iconColor = icon.color;
+        iconColor.a = 0.5f;
+        icon.color = iconColor;
+    }
+    public void EnableCard()
+    {
+        button.interactable = true;
+    }
+    public void DisableCard()
+    {
+        button.interactable = false;
     }
 
     private IEnumerator FlipCardCoroutine(bool show)

@@ -115,6 +115,8 @@ public class BoardManager : MonoBehaviour
             Card card = cardObj.GetComponent<Card>();
             card.dataSO = cardData;
             card.OnCardClicked += CardClickEvent;
+            card.OnCardClicked += GameplayManager.Instance.HandleCardFlipped;
+
             activeCards.Add(card);
 
         }
@@ -141,23 +143,23 @@ public class BoardManager : MonoBehaviour
     // ======================================================
     private void UpdateGridLayout(int rows, int cols)
     {
-        RectTransform rt = gridLayout.GetComponent<RectTransform>();
+        // RectTransform rt = gridLayout.GetComponent<RectTransform>();
 
-        // Tính width & height khả dụng
-        float width = rt.rect.width - gridLayout.padding.left - gridLayout.padding.right - gridLayout.spacing.x * (cols - 1);
-        float height = rt.rect.height - gridLayout.padding.top - gridLayout.padding.bottom - gridLayout.spacing.y * (rows - 1);
+        // // Tính width & height khả dụng
+        // float width = rt.rect.width - gridLayout.padding.left - gridLayout.padding.right - gridLayout.spacing.x * (cols - 1);
+        // float height = rt.rect.height - gridLayout.padding.top - gridLayout.padding.bottom - gridLayout.spacing.y * (rows - 1);
 
-        // Chọn cellSize vuông
-        float cellSize = Mathf.Min(width / cols, height / rows);
-        gridLayout.cellSize = new Vector2(cellSize, cellSize);
+        // // Chọn cellSize vuông
+        // float cellSize = Mathf.Min(width / cols, height / rows);
+        // gridLayout.cellSize = new Vector2(cellSize, cellSize);
 
-        // Căn giữa board nếu dư khoảng trống
-        float boardWidth = cellSize * cols + gridLayout.spacing.x * (cols - 1);
-        float boardHeight = cellSize * rows + gridLayout.spacing.y * (rows - 1);
+        // // Căn giữa board nếu dư khoảng trống
+        // float boardWidth = cellSize * cols + gridLayout.spacing.x * (cols - 1);
+        // float boardHeight = cellSize * rows + gridLayout.spacing.y * (rows - 1);
 
-        gridLayout.padding.left = Mathf.RoundToInt((rt.rect.width - boardWidth) / 2f);
-        gridLayout.padding.right = gridLayout.padding.left;
-        gridLayout.padding.top = Mathf.RoundToInt((rt.rect.height - boardHeight) / 2f);
-        gridLayout.padding.bottom = gridLayout.padding.top;
+        // gridLayout.padding.left = Mathf.RoundToInt((rt.rect.width - boardWidth) / 2f);
+        // gridLayout.padding.right = gridLayout.padding.left;
+        // gridLayout.padding.top = Mathf.RoundToInt((rt.rect.height - boardHeight) / 2f);
+        // gridLayout.padding.bottom = gridLayout.padding.top;
     }
 }

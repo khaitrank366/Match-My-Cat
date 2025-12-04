@@ -215,6 +215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 4723136522343497216}
+  button: {fileID: 5680077685530416838}
   dataSO: {fileID: 11400000, guid: dc7bde66ad603434193f5af802c3604b, type: 2}
   hiddenSprite: {fileID: 21300000, guid: 9f4564350b600b248a0f6328c242ce82, type: 3}
   isSelected: 0

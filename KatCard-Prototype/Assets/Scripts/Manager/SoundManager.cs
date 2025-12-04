@@ -25,6 +25,19 @@ public class SoundManager : MonoBehaviour
         }
         else Destroy(gameObject);
     }
+    private void OnEnable()
+    {
+        GameplayManager.Instance.OnComboChanged += PlayCombo;
+        GameplayManager.Instance.OnMatch += (a, b) => PlaySfx(soundProfile.matchSfx);
+        GameplayManager.Instance.OnMismatch += (a, b) => PlaySfx(soundProfile.mismatchSfx);
+    }
+
+    private void OnDisable()
+    {
+        GameplayManager.Instance.OnComboChanged -= PlayCombo;
+        GameplayManager.Instance.OnMatch -= (a, b) => PlaySfx(soundProfile.matchSfx);
+        GameplayManager.Instance.OnMismatch -= (a, b) => PlaySfx(soundProfile.mismatchSfx);
+    }
     public void PlayFlip(AudioClip clip)
     {
         Debug.Log("Playing Flip SFX: " + clip.name);
@@ -42,13 +55,17 @@ public class SoundManager : MonoBehaviour
     private void PlaySfx(AudioClip clip)
     {
         Debug.Log("Playing SFX: " + clip.name);
+        if (flipSource.isPlaying)
+            flipSource.Stop();
         sfxSource.PlayOneShot(clip);
     }
-    public int CountdownEvent = 0;
+    //public int CountdownEvent = 0;
     [ContextMenu("Play Combo Test")]
-    public void PlayCombo()
+    public void PlayCombo(int comboCount)
     {
-        int comboCount = CountdownEvent;
+        if (comboCount < 1)
+            return;
+
         AudioClip clip = null;
 
         if (comboCount == 1)

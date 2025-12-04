@@ -51,7 +51,7 @@ public class GameplayManager : MonoBehaviour
         if (firstCard.dataSO.cardId == secondCard.dataSO.cardId)
         {
             // Update combo
-            Debug.Log($"Cards Matched! Combo: {combo}");
+            //Debug.Log($"Cards Matched! Combo: {combo}");
             float now = Time.time;
             combo = (now - lastMatchTime <= comboResetTime) ? combo + 1 : 1;
             lastMatchTime = now;
@@ -65,9 +65,10 @@ public class GameplayManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Cards Mismatched!");
+            //Debug.Log("Cards Mismatched!");
             combo = 0;
             OnComboChanged?.Invoke(combo);
+            OnMismatch?.Invoke(firstCard, secondCard);
 
             // Disable input tạm thời
             firstCard.DisableCard();
@@ -82,7 +83,7 @@ public class GameplayManager : MonoBehaviour
             secondCard.EnableCard();
 
             // Trigger mismatch event
-            OnMismatch?.Invoke(firstCard, secondCard);
+
         }
 
         firstCard = secondCard = null;

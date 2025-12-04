@@ -28,14 +28,12 @@ public class SoundManager : MonoBehaviour
     private void OnEnable()
     {
         GameplayManager.Instance.OnComboChanged += PlayCombo;
-        GameplayManager.Instance.OnMatch += (a, b) => PlaySfx(soundProfile.matchSfx);
         GameplayManager.Instance.OnMismatch += (a, b) => PlaySfx(soundProfile.mismatchSfx);
     }
 
     private void OnDisable()
     {
         GameplayManager.Instance.OnComboChanged -= PlayCombo;
-        GameplayManager.Instance.OnMatch -= (a, b) => PlaySfx(soundProfile.matchSfx);
         GameplayManager.Instance.OnMismatch -= (a, b) => PlaySfx(soundProfile.mismatchSfx);
     }
     public void PlayFlip(AudioClip clip)

@@ -165,8 +165,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f3e399ab52d4b9d46b398ca4bafb718e, type: 2}
   - {fileID: 11400000, guid: c9886a26fe2ca454c82310826e7e118f, type: 2}
   gridLayout: {fileID: 1388316064}
-  rowTest: 3
-  colTest: 2
+  rowTest: 2
+  colTest: 8
   activeCards: []
 --- !u!4 &204156574
 Transform:

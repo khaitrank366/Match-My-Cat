@@ -23,6 +23,14 @@ public class BoardManager : MonoBehaviour
         GenerateBoard(rowTest, colTest);
     }
 
+    [ContextMenu("Reveal Board")]
+    public void ReVealBoard()
+    {
+        foreach (var card in activeCards)
+        {
+            card.Reveal();
+        }
+    }
     public void GenerateBoard(int rows, int cols)
     {
         if (!IsLayoutValid(rows, cols)) return;

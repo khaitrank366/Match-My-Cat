@@ -25,6 +25,11 @@ public class Card : MonoBehaviour
             StartCoroutine(FlipCardCoroutine(show: true));
     }
 
+    public void Reveal()
+    {
+        icon.sprite = dataSO.sprite;
+    }
+
     [ContextMenu("Hide Card")]
     public void Hide()
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,7 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     [SerializeField] Image icon;
+    [SerializeField] Image background;
     [SerializeField] Button button;
     public CardData dataSO;
     [SerializeField] Sprite hiddenSprite;
@@ -30,6 +32,21 @@ public class Card : MonoBehaviour
         icon.sprite = dataSO.sprite;
     }
 
+    public void Reset()
+    {
+        OnCardClicked = null;
+        isSelected = false;
+        isFlipping = false;
+        button.interactable = true;
+
+        background.color = new Color(1f, 1f, 1f, 1f);
+        icon.sprite = hiddenSprite;
+        transform.rotation = Quaternion.identity;
+        Vector3 s = icon.transform.localScale;
+        s.x = Mathf.Abs(s.x);
+        icon.transform.localScale = s;
+    }
+
     [ContextMenu("Hide Card")]
     public void Hide()
     {
@@ -45,20 +62,15 @@ public class Card : MonoBehaviour
     public void SetMatched()
     {
         isSelected = true;
-
         button.interactable = false;
 
-        var iconColor = icon.color;
-        iconColor.a = 0.5f;
-        icon.color = iconColor;
+        background.color = new Color(0f, 1f, 0f, 0.5f);
     }
-    public void EnableCard()
-    {
-        button.interactable = true;
-    }
-    public void DisableCard()
+
+    public void SetUnmatched()
     {
         button.interactable = false;
+        background.color = new Color(1f, 0f, 0f, 1f);
     }
 
     private IEnumerator FlipCardCoroutine(bool show)
@@ -102,6 +114,7 @@ public class Card : MonoBehaviour
         // 2️⃣ Đổi sprite khi card quay giữa
         icon.sprite = show ? dataSO.sprite : hiddenSprite;
         isSelected = show;
+        if (!show) Reset();
 
         // 3️⃣ Quay tiếp 90° để hoàn tất lật
         t = 0f;

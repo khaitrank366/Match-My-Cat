@@ -1,26 +1,35 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private Text scoreText;
     private int score = 0;
-    private int comboMultiplier = 1;
 
     private void OnEnable()
     {
-        GameplayManager.Instance.OnComboChanged += UpdateScore;
+        StartCoroutine(WaitAndRegister());
+    }
+
+    private IEnumerator WaitAndRegister()
+    {
+        while (GameplayManager.Instance == null)
+            yield return null;
+
+        GameplayManager.Instance.OnComboChanged += AddScore;
     }
 
     private void OnDisable()
     {
-        GameplayManager.Instance.OnComboChanged -= UpdateScore;
+        GameplayManager.Instance.OnComboChanged -= AddScore;
     }
 
-    private void UpdateScore(int comboCount)
+    private void AddScore(int combo)
     {
-        comboMultiplier = Mathf.Clamp(1 + comboCount / 2, 1, 5); // ví dụ: 2 combo → x2, 10 combo → x5 max
-        score += 10 * comboMultiplier;
+        if (combo == 0) return;
+
+        score += 10;
         scoreText.text = $"Score: {score}";
     }
 }

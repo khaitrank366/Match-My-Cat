@@ -130,6 +130,11 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    private void CardClickEvent(Card card)
+    {
+        SoundManager.Instance.PlayFlip(card.dataSO.flipSound);
+    }
+
     private void DespawnCards()
     {
         foreach (var card in activeCards)
@@ -142,10 +147,7 @@ public class BoardManager : MonoBehaviour
         activeCards.Clear();
     }
 
-    private void CardClickEvent(Card card)
-    {
-        SoundManager.Instance.PlayFlip(card.dataSO.flipSound);
-    }
+
 
     // ======================================================
     // 5. Cập nhật GridLayoutGroup theo rows/cols nhập

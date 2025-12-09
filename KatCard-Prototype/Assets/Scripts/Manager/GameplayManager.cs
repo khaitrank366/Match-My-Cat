@@ -1,34 +1,27 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
 {
     public static GameplayManager Instance { get; private set; }
 
-    // Events
-    public event Action<Card, Card> OnMatch;
-    public event Action<Card, Card> OnMismatch;
+    public event Action OnMatch;
+    public event Action OnMismatch;
     public event Action<int> OnComboChanged;
 
     [SerializeField] private Card firstCard;
     [SerializeField] private Card secondCard;
-
-    [SerializeField] private int combo = 0;
-    [SerializeField] private float comboResetTime = 3f;
-    [SerializeField] private float lastMatchTime;
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public void HandleCardFlipped(Card card)
@@ -36,53 +29,37 @@ public class GameplayManager : MonoBehaviour
         if (firstCard == null)
         {
             firstCard = card;
-            // Debug.Log("First card selected: " + card.dataSO.cardId);
         }
         else if (secondCard == null)
         {
             secondCard = card;
-            // Debug.Log("Second card selected: " + card.dataSO.cardId);
             CheckMatch();
         }
     }
 
     private void CheckMatch()
     {
-        if (firstCard.dataSO.cardId == secondCard.dataSO.cardId)
-        {
-            // Update combo
-            //Debug.Log($"Cards Matched! Combo: {combo}");
-            float now = Time.time;
-            combo = (now - lastMatchTime <= comboResetTime) ? combo + 1 : 1;
-            lastMatchTime = now;
+        bool match = firstCard.dataSO.cardId == secondCard.dataSO.cardId;
 
+        if (match)
+        {
             firstCard.SetMatched();
             secondCard.SetMatched();
-
-            OnMatch?.Invoke(firstCard, secondCard);
-            OnComboChanged?.Invoke(combo);
-
             firstCard = secondCard = null;
+            OnMatch?.Invoke();
         }
         else
         {
-            //Debug.Log("Cards Mismatched!");
-            combo = 0;
-            OnComboChanged?.Invoke(combo);
-            OnMismatch?.Invoke(firstCard, secondCard);
-
             firstCard.SetUnmatched();
             secondCard.SetUnmatched();
-
             firstCard = secondCard = null;
+            OnMismatch?.Invoke();
         }
 
     }
 
-    // Optional: reset combo manually
-    public void ResetCombo()
+    public void NotifyComboChanged(int combo)
     {
-        combo = 0;
         OnComboChanged?.Invoke(combo);
     }
 }

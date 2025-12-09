@@ -62,6 +62,8 @@ public class SoundManager : MonoBehaviour
 
     private void PlaySfx(AudioClip clip)
     {
+        if (flipSource.isPlaying)
+            flipSource.Stop();
         sfxSource.PlayOneShot(clip);
     }
 

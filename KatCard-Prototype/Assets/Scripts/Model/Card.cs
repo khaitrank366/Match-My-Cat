@@ -38,8 +38,8 @@ public class Card : MonoBehaviour
         icon.transform.localRotation = Quaternion.identity;
         icon.transform.localPosition = Vector3.zero;
         icon.transform.localScale = Vector3.one;
-        transform.localRotation = Quaternion.identity;   
-        transform.localPosition = Vector3.zero;          
+        transform.localRotation = Quaternion.identity;
+        transform.localPosition = Vector3.zero;
         transform.localScale = Vector3.one;
 
         button.interactable = true;
@@ -71,7 +71,9 @@ public class Card : MonoBehaviour
 
     private IEnumerator Flip(bool show)
     {
-        if (isFlipping) yield break;
+        if (isFlipping)
+            yield break;
+
         isFlipping = true;
         float halfDuration = flipDuration / 2f;
         float direction = show ? 1f : -1f;
@@ -125,6 +127,7 @@ public class Card : MonoBehaviour
         transform.rotation = endRotation;
         isFlipping = false;
 
-        if (show) OnCardClicked?.Invoke(this);
+        if (show)
+            OnCardClicked?.Invoke(this);
     }
 }

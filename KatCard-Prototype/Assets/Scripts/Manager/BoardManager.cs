@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +18,18 @@ public class BoardManager : MonoBehaviour
     public int colTest = 5;
     [SerializeField] private List<Card> activeCards = new List<Card>();
 
+    void OnEnable()
+    {
+        StartCoroutine(Register());
+    }
+
+    private IEnumerator Register()
+    {
+        while (GameplayManager.Instance == null)
+            yield return null;
+
+        GenerateBoardDefault();
+    }
 
     [ContextMenu("Generate Board")]
     public void GenerateBoardDefault()

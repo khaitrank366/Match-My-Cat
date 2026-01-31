@@ -43,7 +43,7 @@ public class ScoreManager : MonoBehaviour
 
         score += 10 * combo;
         scoreText.text = $"Score: {score}";
-        comboTimerUI.StartTimer();
+        comboTimerUI.StartTimer(combo);
         GameplayManager.Instance.NotifyComboChanged(combo);
     }
 

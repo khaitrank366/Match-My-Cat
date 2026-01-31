@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] private Text scoreText;
+    [SerializeField] private ComboTimerUI comboTimerUI;
 
     private int score = 0;
     private int combo = 0;
@@ -41,13 +42,14 @@ public class ScoreManager : MonoBehaviour
 
         score += 10 * combo;
         scoreText.text = $"Score: {score}";
-
+        comboTimerUI.StartTimer();
         GameplayManager.Instance.NotifyComboChanged(combo);
     }
 
     private void HandleMismatch()
     {
         combo = 0;
+        comboTimerUI.StopTimer();
         GameplayManager.Instance.NotifyComboChanged(combo);
     }
 }

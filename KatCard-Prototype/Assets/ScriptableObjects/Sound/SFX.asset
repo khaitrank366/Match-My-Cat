@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   matchSfx: {fileID: 8300000, guid: 82b07e93d31f16c46a198dd123e4fc9f, type: 3}
   mismatchSfx: {fileID: 8300000, guid: a30f0908ca783754dabb09a7608c7d6d, type: 3}
-  gameOverSfx: {fileID: 8300000, guid: 0149938e84c83534f86a22733834eed6, type: 3}
+  gameOverSfx: {fileID: 8300000, guid: 45d40f8eec459d547a6108894427768f, type: 3}
   warning10sSfx: {fileID: 8300000, guid: ff15a6d2c3c16d74a812aa11e3ee01eb, type: 3}
   comboSounds:
   - {fileID: 8300000, guid: 99300e910c3b73d459c25aa4257ba70d, type: 3}

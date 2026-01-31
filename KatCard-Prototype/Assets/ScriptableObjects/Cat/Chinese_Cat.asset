@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardId: 4
   sprite: {fileID: 21300000, guid: 0d59f7feccda8f843af8933e3ac4accd, type: 3}
-  flipSound: {fileID: 8300000, guid: 0e056f21a72c01b4d98367a30ba658e3, type: 3}
+  flipSound: {fileID: 8300000, guid: ecc8a90df06a57148851c4de1eb27449, type: 3}

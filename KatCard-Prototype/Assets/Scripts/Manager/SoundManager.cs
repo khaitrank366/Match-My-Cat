@@ -31,6 +31,8 @@ public class SoundManager : MonoBehaviour
 
         GameplayManager.Instance.OnMismatch -= PlayMismatchFromEvent;
         GameplayManager.Instance.OnComboChanged -= PlayCombo;
+        GameplayManager.Instance.OnGameCompleted -= PlayGameOver;
+
     }
 
     private IEnumerator Register()
@@ -40,6 +42,7 @@ public class SoundManager : MonoBehaviour
 
         GameplayManager.Instance.OnMismatch += PlayMismatchFromEvent;
         GameplayManager.Instance.OnComboChanged += PlayCombo;
+        GameplayManager.Instance.OnGameCompleted += PlayGameOver;
     }
     private void PlayMismatchFromEvent() => PlayMismatch();
 
@@ -52,7 +55,13 @@ public class SoundManager : MonoBehaviour
     }
 
     public void PlayMismatch() => PlaySfx(soundProfile.mismatchSfx);
-    public void PlayGameOver() => PlaySfx(soundProfile.gameOverSfx);
+    public void PlayGameOver() => StartCoroutine(DelayedGameOver(0.5f));    
+
+    IEnumerator DelayedGameOver(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        PlaySfx(soundProfile.gameOverSfx);
+    }
     public void PlayWarning10s() => PlaySfx(soundProfile.warning10sSfx);
 
     private void PlaySfx(AudioClip clip)

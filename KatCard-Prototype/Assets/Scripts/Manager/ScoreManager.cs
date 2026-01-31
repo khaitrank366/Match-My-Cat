@@ -25,6 +25,7 @@ public class ScoreManager : MonoBehaviour
 
         GameplayManager.Instance.OnMatch += HandleMatch;
         GameplayManager.Instance.OnMismatch += HandleMismatch;
+        comboTimerUI.Init(comboResetTime);
     }
 
     private void OnDisable()

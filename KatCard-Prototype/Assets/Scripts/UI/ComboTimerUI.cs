@@ -4,11 +4,11 @@ using UnityEngine.UI;
 public class ComboTimerUI : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private Image timerFill;   
-        [SerializeField] private Text timerText;    
+    [SerializeField] private Image timerFill;
+    [SerializeField] private Text timerText;
 
     [Header("Config")]
-    [SerializeField] private float comboResetTime = 3f;
+    [SerializeField] private float comboResetTime = 0f;
 
     private float timer;
     private bool isRunning;
@@ -25,6 +25,12 @@ public class ComboTimerUI : MonoBehaviour
         {
             StopTimer();
         }
+    }
+
+    public void Init(float time)
+    {
+        comboResetTime = time;
+        gameObject.SetActive(false);
     }
 
     public void StartTimer()

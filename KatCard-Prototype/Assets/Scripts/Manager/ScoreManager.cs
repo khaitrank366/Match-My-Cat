@@ -22,6 +22,8 @@ public class ScoreManager : MonoBehaviour
     private int score = 0;
     private int combo = 0;
 
+    private int currentHighestcombo = 0;
+
     private int highestScore = 0;
     private int highestCombo = 0;
 
@@ -50,6 +52,10 @@ public class ScoreManager : MonoBehaviour
 
     private void InitScore()
     {
+        score = 0;
+        combo = 0;
+        currentHighestcombo = 0;
+
         comboTimerUI.Init(comboResetTime);
 
         GameSaveManager.Instance.LoadScore(out highestScore, out highestCombo);
@@ -70,6 +76,9 @@ public class ScoreManager : MonoBehaviour
 
         combo = (now - lastMatchTime <= comboResetTime) ? combo + 1 : 1;
         lastMatchTime = now;
+
+        if (combo > currentHighestcombo)
+            currentHighestcombo = combo;
 
         score += 10 * combo;
 
@@ -113,15 +122,23 @@ public class ScoreManager : MonoBehaviour
     IEnumerator ShowFinalScoresAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        scoreText.text = "";
+        scoreText.text = "Score: 0";
         highestComboText.text = "";
-        highestComboText.text = "";
+        highestScoreText.text = "";
         SetCanvasGroup(inGameCanvasGroup, false);
         highestScoreTextEndGame.text = $"Highest Score: {highestScore}";
         highestComboTextEndGame.text = $"Highest Combo: {highestCombo}";
         yourScoreText.text = $"Your Score: {score}";
-        yourComboText.text = $"Your Highest Combo: {combo}";
+        yourComboText.text = $"Your Highest Combo: {currentHighestcombo}";
         SetCanvasGroup(endGameCanvasGroup, true);
+    }
+
+    public void Restart()
+    {
+        SetCanvasGroup(inGameCanvasGroup, true);
+        SetCanvasGroup(endGameCanvasGroup, false);
+
+        InitScore();
     }
 
     void SetCanvasGroup(CanvasGroup cg, bool enabled)

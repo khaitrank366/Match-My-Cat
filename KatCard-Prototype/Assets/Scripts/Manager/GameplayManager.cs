@@ -9,8 +9,8 @@ public class GameplayManager : MonoBehaviour
     public event Action OnMismatch;
     public event Action<int> OnComboChanged;
 
-    [SerializeField] private Card firstCard;
-    [SerializeField] private Card secondCard;
+    [SerializeField] private CardUI firstCard;
+    [SerializeField] private CardUI secondCard;
 
     private void Awake()
     {
@@ -49,7 +49,7 @@ public class GameplayManager : MonoBehaviour
         OnComboChanged?.Invoke(combo);
     }
 
-    public void HandleCardFlipped(Card card)
+    public void HandleCardFlipped(CardUI card)
     {
         if (firstCard == null)
         {

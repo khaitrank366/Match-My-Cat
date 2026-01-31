@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-    
+
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
         Instance = this;
 
     }
-
+    [ContextMenu("Reset Game")]
     private void Start()
     {
         gameCanvas.gameObject.SetActive(false);

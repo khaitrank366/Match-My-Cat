@@ -16,11 +16,11 @@ public class BoardManager : MonoBehaviour
     [Header("Board Size")]
     public int rowTest = 2;
     public int colTest = 5;
-    [SerializeField] private List<Card> activeCards = new List<Card>();
+    [SerializeField] private List<CardUI> activeCards = new List<CardUI>();
 
     void OnEnable()
     {
-        StartCoroutine(Register());
+        // StartCoroutine(Register());
     }
 
     private IEnumerator Register()
@@ -29,6 +29,11 @@ public class BoardManager : MonoBehaviour
             yield return null;
 
         GenerateBoardDefault();
+    }
+
+    public void InitBoard(Vector2Int layout)
+    {
+        GenerateBoard(layout.x, layout.y);
     }
 
     [ContextMenu("Generate Board")]
@@ -134,7 +139,7 @@ public class BoardManager : MonoBehaviour
             cardObj.transform.SetParent(gridLayout.transform, false);
             cardObj.SetActive(true);
 
-            Card card = cardObj.GetComponent<Card>();
+            CardUI card = cardObj.GetComponent<CardUI>();
             card.dataSO = cardData;
             card.OnCardClicked += CardClickEvent;
             card.OnCardClicked += GameplayManager.Instance.HandleCardFlipped;
@@ -144,7 +149,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private void CardClickEvent(Card card)
+    private void CardClickEvent(CardUI card)
     {
         SoundManager.Instance.PlayFlip(card.dataSO.flipSound);
     }

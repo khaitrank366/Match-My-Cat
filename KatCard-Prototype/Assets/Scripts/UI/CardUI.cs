@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Card : MonoBehaviour
+public class CardUI : MonoBehaviour
 {
     [SerializeField] Image icon;
     [SerializeField] Image background;
@@ -13,7 +13,7 @@ public class Card : MonoBehaviour
     [SerializeField] private float flipDuration = 0.5f;
     private bool isFlipping = false;
 
-    public event Action<Card> OnCardClicked;
+    public event Action<CardUI> OnCardClicked;
 
     public void ClickCard()
     {

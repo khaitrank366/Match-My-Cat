@@ -12,6 +12,11 @@ public class GameplayManager : MonoBehaviour
     [SerializeField] private CardUI firstCard;
     [SerializeField] private CardUI secondCard;
 
+    public event Action OnGameCompleted;
+
+    private int totalPairs;
+    private int matchedPairs;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -23,6 +28,17 @@ public class GameplayManager : MonoBehaviour
         Instance = this;
     }
 
+    public void InitGame(int pairCount)
+    {
+        totalPairs = pairCount;
+        matchedPairs = 0;
+
+        firstCard = null;
+        secondCard = null;
+
+        Debug.Log($"[GAME] Init with {totalPairs} pairs");
+    }
+
     private void CheckMatch()
     {
         bool match = firstCard.dataSO.cardId == secondCard.dataSO.cardId;
@@ -31,8 +47,17 @@ public class GameplayManager : MonoBehaviour
         {
             firstCard.SetMatched();
             secondCard.SetMatched();
-            firstCard = secondCard = null;
+            matchedPairs++;
             OnMatch?.Invoke();
+
+            firstCard = secondCard = null;
+
+            Debug.Log($"[MATCH] {matchedPairs}/{totalPairs}");
+            if (matchedPairs >= totalPairs)
+            {
+                Debug.Log("[GAME] Completed!");
+                OnGameCompleted?.Invoke();
+            }
         }
         else
         {

@@ -8,6 +8,8 @@ public class LayoutSelectUI : MonoBehaviour
     public GameObject boardCanvas;
     public BoardManager boardManager;
     private List<Vector2Int> layouts = new();
+    [SerializeField]
+    private Vector2Int mylayout;
 
     void Start()
     {
@@ -50,6 +52,25 @@ public class LayoutSelectUI : MonoBehaviour
             options.Add($"{l.x} x {l.y}");
 
         layoutDropdown.AddOptions(options);
+
+        LoadSavedLayout();
+    }
+
+    private void LoadSavedLayout()
+    {
+        if (!GameSaveManager.Instance.TryLoadLayout(out Vector2Int savedLayout))
+            return;
+
+        int selectedIndex = layouts.FindIndex(l =>
+            l.x == savedLayout.x && l.y == savedLayout.y);
+
+        if (selectedIndex >= 0)
+        {
+            layoutDropdown.SetValueWithoutNotify(selectedIndex);
+            layoutDropdown.RefreshShownValue();
+
+            Debug.Log($"[DROPDOWN] Loaded saved layout {savedLayout.x}x{savedLayout.y}");
+        }
     }
 
     public void OnConfirmClick()
@@ -58,6 +79,12 @@ public class LayoutSelectUI : MonoBehaviour
         Vector2Int selected = layouts[index];
 
         boardManager.InitBoard(selected);
+
+        if (mylayout != selected)
+        {
+            GameSaveManager.Instance.SaveLayout(selected);
+            Debug.Log($"[DROPDOWN] saved layout {selected.x}x{selected.y}");
+        }
 
         UIManager.Instance.StartGame();
     }

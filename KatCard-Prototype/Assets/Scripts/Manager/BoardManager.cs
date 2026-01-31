@@ -33,6 +33,10 @@ public class BoardManager : MonoBehaviour
 
     public void InitBoard(Vector2Int layout)
     {
+        int totalCards = layout.x * layout.y;
+        int pairCount = totalCards / 2;
+        GameplayManager.Instance.InitGame(pairCount);
+
         GenerateBoard(layout.x, layout.y);
     }
 

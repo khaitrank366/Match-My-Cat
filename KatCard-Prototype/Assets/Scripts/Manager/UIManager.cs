@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
 
     }
     [ContextMenu("Reset Game")]
-    private void Start()
+    public void Start()
     {
         gameCanvas.gameObject.SetActive(false);
         uiCanvas.gameObject.SetActive(true);

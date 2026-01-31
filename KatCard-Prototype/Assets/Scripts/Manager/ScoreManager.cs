@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,15 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private ComboTimerUI comboTimerUI;
     [SerializeField] private Text highestScoreText;
     [SerializeField] private Text highestComboText;
+
+    [SerializeField] private Text highestScoreTextEndGame;
+    [SerializeField] private Text highestComboTextEndGame;
+
+    [SerializeField] private Text yourScoreText;
+    [SerializeField] private Text yourComboText;
+
+    [SerializeField] private CanvasGroup inGameCanvasGroup;
+    [SerializeField] private CanvasGroup endGameCanvasGroup;
 
     private int score = 0;
     private int combo = 0;
@@ -25,6 +35,9 @@ public class ScoreManager : MonoBehaviour
 
     private IEnumerator Register()
     {
+        SetCanvasGroup(inGameCanvasGroup, true);
+        SetCanvasGroup(endGameCanvasGroup, false);
+
         InitScore();
 
         while (GameplayManager.Instance == null)
@@ -94,5 +107,27 @@ public class ScoreManager : MonoBehaviour
         Debug.Log("🎉 Player finished the game!");
 
         comboTimerUI.StopTimer();
+        StartCoroutine(ShowFinalScoresAfterDelay(0.5f));
+    }
+
+    IEnumerator ShowFinalScoresAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        scoreText.text = "";
+        highestComboText.text = "";
+        highestComboText.text = "";
+        SetCanvasGroup(inGameCanvasGroup, false);
+        highestScoreTextEndGame.text = $"Highest Score: {highestScore}";
+        highestComboTextEndGame.text = $"Highest Combo: {highestCombo}";
+        yourScoreText.text = $"Your Score: {score}";
+        yourComboText.text = $"Your Highest Combo: {combo}";
+        SetCanvasGroup(endGameCanvasGroup, true);
+    }
+
+    void SetCanvasGroup(CanvasGroup cg, bool enabled)
+    {
+        cg.alpha = enabled ? 1f : 0f;
+        cg.interactable = enabled;
+        cg.blocksRaycasts = enabled;
     }
 }

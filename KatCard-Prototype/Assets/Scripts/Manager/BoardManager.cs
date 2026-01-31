@@ -23,6 +23,11 @@ public class BoardManager : MonoBehaviour
         // StartCoroutine(Register());
     }
 
+    void OnDisable()
+    {
+        GameplayManager.Instance.OnGameCompleted -= HandleGameCompleted;
+    }
+
     private IEnumerator Register()
     {
         while (GameplayManager.Instance == null)
@@ -36,8 +41,20 @@ public class BoardManager : MonoBehaviour
         int totalCards = layout.x * layout.y;
         int pairCount = totalCards / 2;
         GameplayManager.Instance.InitGame(pairCount);
+        GameplayManager.Instance.OnGameCompleted += HandleGameCompleted;
 
         GenerateBoard(layout.x, layout.y);
+    }
+
+    private void HandleGameCompleted()
+    {
+        StartCoroutine(HideBoardAfterDelay(0.5f));
+    }
+
+    IEnumerator HideBoardAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        gridLayout.gameObject.SetActive(false);
     }
 
     [ContextMenu("Generate Board")]
@@ -62,6 +79,7 @@ public class BoardManager : MonoBehaviour
         ShuffleCards(boardCards);
         SpawnCards(boardCards);
         UpdateGridLayout(rows, cols);
+        gridLayout.gameObject.SetActive(true);
     }
 
     // ======================================================

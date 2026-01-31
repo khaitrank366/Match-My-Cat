@@ -29,7 +29,6 @@ public class SoundManager : MonoBehaviour
     {
         if (GameplayManager.Instance == null) return;
 
-        GameplayManager.Instance.OnMatch -= PlayMatchFromEvent;
         GameplayManager.Instance.OnMismatch -= PlayMismatchFromEvent;
         GameplayManager.Instance.OnComboChanged -= PlayCombo;
     }
@@ -39,12 +38,9 @@ public class SoundManager : MonoBehaviour
         while (GameplayManager.Instance == null)
             yield return null;
 
-        GameplayManager.Instance.OnMatch += PlayMatchFromEvent;
         GameplayManager.Instance.OnMismatch += PlayMismatchFromEvent;
         GameplayManager.Instance.OnComboChanged += PlayCombo;
     }
-
-    private void PlayMatchFromEvent() => PlayMatch();
     private void PlayMismatchFromEvent() => PlayMismatch();
 
     public void PlayFlip(AudioClip clip)
@@ -55,7 +51,6 @@ public class SoundManager : MonoBehaviour
         flipSource.PlayOneShot(clip);
     }
 
-    public void PlayMatch() => PlaySfx(soundProfile.matchSfx);
     public void PlayMismatch() => PlaySfx(soundProfile.mismatchSfx);
     public void PlayGameOver() => PlaySfx(soundProfile.gameOverSfx);
     public void PlayWarning10s() => PlaySfx(soundProfile.warning10sSfx);

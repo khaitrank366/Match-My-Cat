@@ -21,20 +21,6 @@ public class GameplayManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    public void HandleCardFlipped(Card card)
-    {
-        if (firstCard == null)
-        {
-            firstCard = card;
-        }
-        else if (secondCard == null)
-        {
-            secondCard = card;
-            CheckMatch();
-        }
     }
 
     private void CheckMatch()
@@ -61,5 +47,18 @@ public class GameplayManager : MonoBehaviour
     public void NotifyComboChanged(int combo)
     {
         OnComboChanged?.Invoke(combo);
+    }
+
+    public void HandleCardFlipped(Card card)
+    {
+        if (firstCard == null)
+        {
+            firstCard = card;
+        }
+        else if (secondCard == null)
+        {
+            secondCard = card;
+            CheckMatch();
+        }
     }
 }

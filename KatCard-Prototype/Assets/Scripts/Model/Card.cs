@@ -91,12 +91,12 @@ public class Card : MonoBehaviour
 
             if (transform.rotation.eulerAngles.y >= 90f && transform.rotation.eulerAngles.y <= 270f)
             {
-                Vector3 s = icon.transform.localScale; s.x = -Mathf.Abs(s.x); // lật ngang 
+                Vector3 s = icon.transform.localScale; s.x = -Mathf.Abs(s.x);
                 icon.transform.localScale = s;
             }
             else
             {
-                Vector3 s = icon.transform.localScale; s.x = Mathf.Abs(s.x); // trở lại bình thường 
+                Vector3 s = icon.transform.localScale; s.x = Mathf.Abs(s.x);
                 icon.transform.localScale = s;
             }
             yield return null;

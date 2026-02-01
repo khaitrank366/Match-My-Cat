@@ -55,7 +55,13 @@ public class SoundManager : MonoBehaviour
     }
 
     public void PlayMismatch() => PlaySfx(soundProfile.mismatchSfx);
-    public void PlayGameOver() => StartCoroutine(DelayedGameOver(0.5f));    
+    public void PlayGameOver() => StartCoroutine(DelayedGameOver(0.5f));
+
+    public void StopSfx()
+    {
+        if (sfxSource.isPlaying)
+            sfxSource.Stop();
+    }
 
     IEnumerator DelayedGameOver(float delay)
     {

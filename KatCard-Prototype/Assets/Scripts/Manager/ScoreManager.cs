@@ -137,7 +137,6 @@ public class ScoreManager : MonoBehaviour
     {
         SetCanvasGroup(inGameCanvasGroup, true);
         SetCanvasGroup(endGameCanvasGroup, false);
-
         InitScore();
     }
 
